@@ -1,5 +1,6 @@
 function Get-ChromeVersion {
     [CmdletBinding()]
+    [OutputType([System.Diagnostics.FileVersionInfo])]
     param (
     )
 
@@ -14,7 +15,7 @@ function Get-ChromeVersion {
             Test-Path $_
         } | Select-Object -First 1
 
-        [System.Diagnostics.FileVersionInfo]::GetVersionInfo($chromePath).FileVersion
+        [System.Diagnostics.FileVersionInfo]::GetVersionInfo($chromePath)
     }
 
     end {
