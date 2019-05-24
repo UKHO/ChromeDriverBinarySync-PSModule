@@ -1,5 +1,5 @@
 function Update-ChromeDriver {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # The root uri of the chrome driver artifacts
         [Parameter(Mandatory)]
@@ -12,25 +12,30 @@ function Update-ChromeDriver {
     )
 
     begin {
-        New-Item -ItemType Directory -Path $TargetDirectory -Force | Out-Null
+        if (-not (Test-Path $TargetDirectory) -and $PSCmdlet.ShouldProcess("Create $TargetDirectory Directory")) {
+            New-Item -ItemType Directory -Path $TargetDirectory | Out-Null
+        }
         $chromeDriver = Join-Path $TargetDirectory "chromedriver.exe"
     }
 
     process {
         $updateChromeDriver = $true
         $chromeDriverVersion = Get-CorrectChromeDriverVersion -ChromeDriverDownloads $ChromeDriverDownloads
-        if(Test-Path $chromeDriver) {
+        if (Test-Path $chromeDriver) {
             $installedVersion = (& $chromeDriver -version).Split()[1]
-            if($installedVersion -eq $chromeDriverVersion) {
+            if ($installedVersion -eq $chromeDriverVersion) {
                 $updateChromeDriver = $false
             }
         }
-        if($updateChromeDriver) {
-            Get-ChildItem $TargetDirectory | Remove-Item -Force
+        if ($updateChromeDriver) {
+            if ($PSCmdlet.ShouldProcess("Remove all items from $TargetDirectory") ) {
+                Get-ChildItem $TargetDirectory | Remove-Item -Force
+            }
+            if ($PSCmdlet.ShouldProcess("Deploy ChromeDriver $chromeDriverVersion to $TargetDirectory")) {
+                $chromeDriverLocation = Join-Path (Join-Path $ChromeDriverDownloads $chromeDriverVersion) "chromedriver_win32.zip" -Resolve
 
-            $chromeDriverLocation = Join-Path (Join-Path $ChromeDriverDownloads $chromeDriverVersion) "chromedriver_win32.zip" -Resolve
-
-            Expand-Archive $chromeDriverLocation $TargetDirectory
+                Expand-Archive $chromeDriverLocation $TargetDirectory
+            }
         }
     }
 
