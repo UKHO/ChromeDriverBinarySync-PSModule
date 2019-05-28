@@ -18,10 +18,12 @@ steps:
 
 - task: PowerShell@2
   inputs:
-    filePath: ./Build/Set-ModuleVersion.ps1 -BuildNumber "$(Build.BuildNumber)" -ManifestFilePath "$(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync\UKHO.ChromeDriver.BinarySync.psd1"
+    filePath: ./Build/Set-ModuleVersion.ps1
+    arguments: -BuildNumber "$(Build.BuildNumber)" -ManifestFilePath "$(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync\UKHO.ChromeDriver.BinarySync.psd1"
   displayName: Set module version
 
 - task: PowerShell@2
   inputs:
-    filePath: ./Build/Set-ModuleAsPreRelease.ps1 -PreReleaseTag "dev$(Build.BuildId)" -ManifestFilePath "$(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync\UKHO.ChromeDriver.BinarySync.psd1" -Branch $(Build.SourceBranchName)
+    filePath: ./Build/Set-ModuleAsPreRelease.ps1
+    arguments: -PreReleaseTag "dev$(Build.BuildId)" -ManifestFilePath "$(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync\UKHO.ChromeDriver.BinarySync.psd1" -Branch $(Build.SourceBranchName)
   displayName: Set module as PreRelease if branch is not master
