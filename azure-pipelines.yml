@@ -1,0 +1,21 @@
+steps:
+
+- powershell: |
+    $(Build.SourcesDirectory)\Build\Invoke-PSScriptAnalyzer.ps1
+  displayName: Run PSScriptAnalyzer Tests
+
+# Publish the NUnit XML
+- task: PublishTestResults@2
+  displayName: Publish Test Results
+  inputs:
+    testResultsFormat: NUnit
+    testResultsFiles: '$(Build.SourcesDirectory)\Test-*.XML'
+    mergeTestResults: false
+
+- powershell: |
+    ./Build/Set-ModuleVersion.ps1 -BuildNumber "$(Build.BuildNumber)" -ManifestFilePath "$(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync\UKHO.ChromeDriver.BinarySync.psd1"
+  displayName: Set module version
+
+- powershell: |
+    ./Build/Set-ModuleAsPreRelease.ps1 -PreReleaseTag "dev$(Build.BuildId)" -ManifestFilePath "$(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync\UKHO.ChromeDriver.BinarySync.psd1" -Branch $(Build.SourceBranchName)
+  displayName: Set module as PreRelease if branch is not master
