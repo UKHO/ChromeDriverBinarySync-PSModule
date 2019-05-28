@@ -9,7 +9,7 @@ steps:
   displayName: Publish Test Results
   inputs:
     testResultsFormat: NUnit
-    testResultsFiles: '$(Build.SourcesDirectory)\Test-*.XML'
+    testResultsFiles: '$(Build.SourcesDirectory)\**\Test-*.XML'
     mergeTestResults: false
   condition: always()
 
