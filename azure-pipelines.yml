@@ -11,6 +11,7 @@ steps:
     testResultsFormat: NUnit
     testResultsFiles: '$(Build.SourcesDirectory)\Test-*.XML'
     mergeTestResults: false
+  condition: always()
 
 - powershell: |
     ./Build/Set-ModuleVersion.ps1 -BuildNumber "$(Build.BuildNumber)" -ManifestFilePath "$(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync\UKHO.ChromeDriver.BinarySync.psd1"
