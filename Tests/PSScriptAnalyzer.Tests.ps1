@@ -11,6 +11,9 @@ Describe 'PSScriptAnalyzer' -Tag 'PSScriptAnalyzer' {
                     throw $_.Message
                 }
             }
+            if($failures.Count -eq 0) {
+                It $rule { } # This makes it show up as passed in the Pester results
+            }
         }
     }
 }
