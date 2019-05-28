@@ -20,5 +20,5 @@ $buildNumberSplit = $buildNumber.Split('_')
 $buildRevisionNumber = $buildNumberSplit[1] -replace ".DRAFT", ""
 $versionToApply = "$buildRevisionNumber"
 
-Write-Host "Updating Version to $versionToApply"
+Write-Output "Updating Version to $versionToApply"
 Update-ModuleManifest -Path $ManifestFilePath -ModuleVersion $versionToApply -Verbose
