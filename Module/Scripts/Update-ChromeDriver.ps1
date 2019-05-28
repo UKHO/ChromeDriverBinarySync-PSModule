@@ -20,13 +20,16 @@ function Update-ChromeDriver {
 
     process {
         $updateChromeDriver = $true
+
         $chromeDriverVersion = Get-CorrectChromeDriverVersion -ChromeDriverDownloads $ChromeDriverDownloads
+
         if (Test-Path $chromeDriver) {
             $installedVersion = (& $chromeDriver -version).Split()[1]
             if ($installedVersion -eq $chromeDriverVersion) {
                 $updateChromeDriver = $false
             }
         }
+
         if ($updateChromeDriver) {
             if ($PSCmdlet.ShouldProcess("Remove all items from $TargetDirectory") ) {
                 Get-ChildItem $TargetDirectory | Remove-Item -Force
