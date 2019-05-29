@@ -33,5 +33,5 @@ steps:
 - task: PowerShell@2
   inputs:
     filePath: ./Deploy/DeployToFeed.ps1
-    arguments: -RepositoryName $(RepositoryName) -RepositorySourceUri $(RepositorySourceUri) -RepositoryPublishUri $(RepositoryPublishUri) -NugetAPIKey $(NugetApiKey) -ModuleFolderPath $(Build.SourcesDirectory)\UKHO.ADM
+    arguments: -RepositoryName $(RepositoryName) -RepositorySourceUri $(RepositorySourceUri) -RepositoryPublishUri $(RepositoryPublishUri) -NugetAPIKey $(NugetApiKey) -ModuleFolderPath $(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync
   displayName: 'Publish module to feed'
