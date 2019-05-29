@@ -27,3 +27,9 @@ steps:
     filePath: ./Build/Set-ModuleAsPreRelease.ps1
     arguments: -PreReleaseTag "dev$(Build.BuildId)" -ManifestFilePath "$(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync\UKHO.ChromeDriver.BinarySync.psd1" -Branch $(Build.SourceBranchName)
   displayName: Set module as PreRelease if branch is not master
+
+- task: PowerShell@2
+  inputs:
+    filePath: ./Deploy/DeployToFeed.ps1
+    arguments: -RepositoryName $(RepositoryName) -RepositorySourceUri $(RepositorySourceUri) -RepositoryPublishUri $(RepositoryPublishUri) -NugetAPIKey $(NugetApiKey) -ModuleFolderPath $(Build.SourcesDirectory)\UKHO.ADM
+  displayName: 'Publish module to feed'
