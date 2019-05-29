@@ -1,3 +1,5 @@
+name: UKHO.ChromeDriver.BinarySync_$(Date:yyyy)$(DayOfYear)$(Rev:.r)
+
 steps:
 
 - task: PowerShell@2
