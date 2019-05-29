@@ -1,4 +1,4 @@
-function Save-ChromeDriverArtifact {
+function Save-ChromeDriverBinaries {
     [CmdletBinding()]
     param (
         # The directory to place the downloaded files in
