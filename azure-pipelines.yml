@@ -1,4 +1,4 @@
-name: UKHO.ChromeDriver.BinarySync_$(Date:yyyy)$(DayOfYear)$(Rev:.r)
+name: UKHO.ChromeDriver.BinarySync_1.$(Date:yyyy)$(DayOfYear).$(Rev:r)
 
 steps:
 
