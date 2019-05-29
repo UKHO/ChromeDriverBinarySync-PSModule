@@ -1,4 +1,5 @@
-function Save-ChromeDriverArtifact {
+function Save-ChromeDriverBinaries {
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
     [CmdletBinding()]
     param (
         # The directory to place the downloaded files in

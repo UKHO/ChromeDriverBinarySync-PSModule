@@ -1,0 +1,37 @@
+name: UKHO.ChromeDriver.BinarySync_1.$(Date:yyyy)$(DayOfYear).$(Rev:r)
+
+steps:
+
+- task: PowerShell@2
+  inputs:
+    filePath: '$(Build.SourcesDirectory)\Build\Invoke-PSScriptAnalyzer.ps1'
+    ignoreLASTEXITCODE: true
+  displayName: Run PSScriptAnalyzer Tests
+
+# Publish the NUnit XML
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'NUnit'
+    testResultsFiles: '**/TEST-*.xml'
+    mergeTestResults: true
+    failTaskOnFailedTests: true
+    testRunTitle: 'ChromeDriverBinarySync-PSModule Tests'
+  condition: always()
+
+- task: PowerShell@2
+  inputs:
+    filePath: ./Build/Set-ModuleVersion.ps1
+    arguments: -BuildNumber "$(Build.BuildNumber)" -ManifestFilePath "$(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync\UKHO.ChromeDriver.BinarySync.psd1"
+  displayName: Set module version
+
+- task: PowerShell@2
+  inputs:
+    filePath: ./Build/Set-ModuleAsPreRelease.ps1
+    arguments: -PreReleaseTag "dev$(Build.BuildId)" -ManifestFilePath "$(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync\UKHO.ChromeDriver.BinarySync.psd1" -Branch $(Build.SourceBranchName)
+  displayName: Set module as PreRelease if branch is not master
+
+- task: PowerShell@2
+  inputs:
+    filePath: ./Deploy/DeployToFeed.ps1
+    arguments: -RepositoryName $(RepositoryName) -RepositorySourceUri $(RepositorySourceUri) -RepositoryPublishUri $(RepositoryPublishUri) -NugetAPIKey $(NugetApiKey) -ModuleFolderPath $(Build.SourcesDirectory)\UKHO.ChromeDriver.BinarySync
+  displayName: 'Publish module to feed'
