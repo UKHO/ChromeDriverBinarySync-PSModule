@@ -1,12 +1,18 @@
 param(
     [Parameter(Mandatory)]
     [string]
-    $Name
+    $Name,
+    [Parameter(Mandatory)]
+    [string]
+    $RepositoryName,
+    [Parameter(Mandatory)]
+    [string]
+    $RepositorySourceUri
 )
-if (((Get-PSRepository -Name ukho.psgallery -ErrorAction Ignore) | Measure-Object).Count -eq 0) {
-    Write-Output "Register ukho.psgallery PSRepository"
-    Register-PSRepository -Name ukho.psgallery -SourceLocation "https://proget.ukho.gov.uk/nuget/ukho.psgallery/" -InstallationPolicy Trusted
-    Write-Output "ukho.psgallery PSRepository Registered"
+if (((Get-PSRepository -Name $RepositoryName -ErrorAction Ignore) | Measure-Object).Count -eq 0) {
+    Write-Output "Register $RepositoryName PSRepository"
+    Register-PSRepository -Name $RepositoryName -SourceLocation $RepositorySourceUri -InstallationPolicy Trusted
+    Write-Output "$RepositoryName PSRepository Registered"
 }
 Write-Output "Finding latest module"
 $latestModule = Find-Module $Name -AllVersions | Sort-Object Version -Descending | Select-Object -First 1
