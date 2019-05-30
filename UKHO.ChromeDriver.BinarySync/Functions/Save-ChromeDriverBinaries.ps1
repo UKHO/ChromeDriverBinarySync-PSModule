@@ -17,8 +17,6 @@ function Save-ChromeDriverBinaries {
     }
 
     process {
-        New-Item -ItemType Directory -Force -Path $TargetDirectory | Out-Null
-
         $chromeDriverFiles = (Invoke-RestMethod $DownloadRootUrl).ListBucketResult.Contents
 
         $latestReleases = $chromeDriverFiles | Where-Object { $_.Key -like "LATEST_RELEASE*" } | ForEach-Object {
