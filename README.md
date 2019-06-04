@@ -1,4 +1,4 @@
-# UKHO.ChromeDriver.BinarySync
+# UKHO.ChromeDriver.BinarySync -Test
 
 UKHO.ChromeDriver.BinarySync is a PowerShell module that can be used to update ChromeDriver to the correct version according to the version of Chrome that is installed. It contains functionality to create a local cache of the ChromeDriver binaries which are then used to decide which version of ChromeDriver to install.
 
