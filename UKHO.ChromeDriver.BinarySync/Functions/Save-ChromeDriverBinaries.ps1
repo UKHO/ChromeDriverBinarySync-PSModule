@@ -14,7 +14,6 @@ function Save-ChromeDriverBinaries {
     )
 
     begin {
-        $webClient = New-Object net.webclient
     }
 
     process {
@@ -42,7 +41,7 @@ function Save-ChromeDriverBinaries {
                     Write-Output "Downloading: $fileName"
                     # We need to create the file before we write to it else it doesn't work with PSDrives
                     New-Item -Path $fileName -ItemType File -Force | Out-Null
-                    $webClient.Downloadfile("$DownloadRootUrl$($_.Key)", $fileName)
+                    Invoke-WebRequest -Uri "$DownloadRootUrl$($_.Key)" -OutFile $fileName
                 }
             }
         }
