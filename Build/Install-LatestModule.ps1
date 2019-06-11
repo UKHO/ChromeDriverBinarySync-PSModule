@@ -15,7 +15,7 @@ if (((Get-PSRepository -Name $RepositoryName -ErrorAction Ignore) | Measure-Obje
     Write-Output "$RepositoryName PSRepository Registered"
 }
 Write-Output "Finding latest module"
-$latestModule = Find-Module $Name -AllVersions | Sort-Object Version -Descending | Select-Object -First 1
+$latestModule = Find-Module $Name -AllVersions -Repository $RepositoryName | Sort-Object Version -Descending | Select-Object -First 1
 Write-Output "latestModule: $($latestModule.Version)"
 Write-Output "Getting installed module"
 $installedModule = Get-Module -ListAvailable $Name | Sort-Object Version -Descending | Select-Object -First 1
