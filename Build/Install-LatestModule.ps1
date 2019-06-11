@@ -14,6 +14,10 @@ if (((Get-PSRepository -Name $RepositoryName -ErrorAction Ignore) | Measure-Obje
     Write-Output "Register $RepositoryName PSRepository"
     Register-PSRepository -Name $RepositoryName -SourceLocation $RepositorySourceUri -InstallationPolicy Trusted
     Write-Output "$RepositoryName PSRepository Registered"
+} else {
+    Write-Output "Updating configuration for $RepositoryName PSRepository"
+    Set-PSRepository -Name $RepositoryName -SourceLocation $RepositorySourceUri -InstallationPolicy Trusted
+    Write-Output "$RepositoryName PSRepository Configured"
 }
 Write-Output "Finding latest module"
 $latestModule = Find-Module $Name -AllVersions -Repository $RepositoryName | Sort-Object Version -Descending | Select-Object -First 1
