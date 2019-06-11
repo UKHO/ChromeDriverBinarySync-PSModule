@@ -14,6 +14,7 @@ function Save-ChromeDriverBinaries {
     )
 
     begin {
+        $webClient = New-Object net.webclient
     }
 
     process {
@@ -27,12 +28,17 @@ function Save-ChromeDriverBinaries {
         }
 
         $latestReleases | ForEach-Object {
-            Set-Content -Path (Join-Path $TargetDirectory $_.ChromeVersion) -Value $_.ChromeDriverVersion
+            $fileName = Join-Path $TargetDirectory $_.ChromeVersion
+            Write-Output "Downloading: $fileName"
+            Set-Content -Path $fileName -Value $_.ChromeDriverVersion
             $ChromeDriverVersion = $_.ChromeDriverVersion
             $chromeDriverFiles | Where-Object { $_.Key -like "$ChromeDriverVersion*" } | ForEach-Object {
-                $fileName = "$TargetDirectory\$($_.Key)"
-                New-Item -ItemType Directory -Force -Path (Split-Path $fileName) | Out-Null
-                Invoke-WebRequest -Uri "$DownloadRootUrl$($_.Key)" -OutFile $fileName
+                $fileName = Join-Path $TargetDirectory $_.Key
+                if (-not (Test-Path -Path $fileName -PathType Leaf)) {
+                    New-Item -ItemType Directory -Force -Path (Split-Path $fileName) | Out-Null
+                    Write-Output "Downloading: $fileName"
+                    $webClient.Downloadfile("$DownloadRootUrl$($_.Key)", $fileName)
+                }
             }
         }
     }

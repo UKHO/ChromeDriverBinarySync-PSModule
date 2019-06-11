@@ -9,13 +9,18 @@ param(
     [string]
     $RepositorySourceUri
 )
+Write-Output "Installing latest version of $Name"
 if (((Get-PSRepository -Name $RepositoryName -ErrorAction Ignore) | Measure-Object).Count -eq 0) {
     Write-Output "Register $RepositoryName PSRepository"
     Register-PSRepository -Name $RepositoryName -SourceLocation $RepositorySourceUri -InstallationPolicy Trusted
     Write-Output "$RepositoryName PSRepository Registered"
+} else {
+    Write-Output "Updating configuration for $RepositoryName PSRepository"
+    Set-PSRepository -Name $RepositoryName -SourceLocation $RepositorySourceUri -InstallationPolicy Trusted
+    Write-Output "$RepositoryName PSRepository Configured"
 }
 Write-Output "Finding latest module"
-$latestModule = Find-Module $Name -AllVersions | Sort-Object Version -Descending | Select-Object -First 1
+$latestModule = Find-Module $Name -AllVersions -Repository $RepositoryName | Sort-Object Version -Descending | Select-Object -First 1
 Write-Output "latestModule: $($latestModule.Version)"
 Write-Output "Getting installed module"
 $installedModule = Get-Module -ListAvailable $Name | Sort-Object Version -Descending | Select-Object -First 1
