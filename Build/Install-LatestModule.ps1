@@ -9,6 +9,7 @@ param(
     [string]
     $RepositorySourceUri
 )
+Write-Output "Installing latest version of $Name"
 if (((Get-PSRepository -Name $RepositoryName -ErrorAction Ignore) | Measure-Object).Count -eq 0) {
     Write-Output "Register $RepositoryName PSRepository"
     Register-PSRepository -Name $RepositoryName -SourceLocation $RepositorySourceUri -InstallationPolicy Trusted
