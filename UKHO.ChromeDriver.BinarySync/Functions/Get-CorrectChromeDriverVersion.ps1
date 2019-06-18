@@ -8,12 +8,19 @@ function Get-CorrectChromeDriverVersion {
         # The root uri of the chrome driver artifacts
         [Parameter(Mandatory)]
         [string]
-        $ChromeDriverDownloads
+        $ChromeDriverDownloads,
+        [Parameter()]
+        [switch]
+        $IncludeBeta
     )
 
     begin {
         if(-not ($ChromeVersion)) {
-            $ChromeVersion = Get-ChromeVersion
+            if($IncludeBeta){
+                $ChromeVersion = Get-ChromeVersion -IncludeBeta
+            }else{
+                $ChromeVersion = Get-ChromeVersion
+            }
         }
     }
 
