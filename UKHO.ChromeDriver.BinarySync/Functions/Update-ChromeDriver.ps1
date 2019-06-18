@@ -8,7 +8,10 @@ function Update-ChromeDriver {
         # The directory to place the downloaded files in
         [Parameter()]
         [string]
-        $TargetDirectory = "C:\chromedriver"
+        $TargetDirectory = "C:\chromedriver",
+        [Parameter()]
+        [switch]
+        $IncludeBeta
     )
 
     begin {
@@ -21,8 +24,11 @@ function Update-ChromeDriver {
     process {
         $updateChromeDriver = $true
 
-        $chromeDriverVersion = Get-CorrectChromeDriverVersion -ChromeDriverDownloads $ChromeDriverDownloads
-
+        if($IncludeBeta) {
+            $chromeDriverVersion = Get-CorrectChromeDriverVersion -ChromeDriverDownloads $ChromeDriverDownloads -IncludeBeta
+        } else {
+            $chromeDriverVersion = Get-CorrectChromeDriverVersion -ChromeDriverDownloads $ChromeDriverDownloads
+        }
         if (Test-Path $chromeDriver) {
             $installedVersion = (& $chromeDriver -version).Split()[1]
             if ($installedVersion -eq $chromeDriverVersion) {
