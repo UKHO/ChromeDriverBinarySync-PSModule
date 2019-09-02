@@ -5,7 +5,7 @@ steps:
 - task: PowerShell@2
   inputs:
     filePath: '$(Build.SourcesDirectory)\Build\Invoke-PSScriptAnalyzer.ps1'
-    arguments: -RepositoryName $(RepositoryName) -RepositorySourceUri $(RepositorySourceUri)
+    arguments: -RepositorySourceUri $(RepositorySourceUri)
     ignoreLASTEXITCODE: true
   displayName: Run PSScriptAnalyzer Tests
 
