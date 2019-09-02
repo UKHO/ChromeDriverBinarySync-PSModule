@@ -1,13 +1,24 @@
-param($RepositoryName, $RepositorySourceUri, $RepositoryPublishUri, $NugetAPIKey, $ModuleFolderPath)
+param($RepositorySourceUri, $RepositoryPublishUri, $NugetAPIKey, $ModuleFolderPath)
 
-if (((Get-PSRepository -Name $RepositoryName -ErrorAction Ignore) | Measure-Object).Count -eq 0) {
-    Write-Output "Register $RepositoryName PSRepository"
-    Register-PSRepository -Name $RepositoryName -SourceLocation $RepositorySourceUri -PublishLocation $RepositoryPublishUri -InstallationPolicy Trusted
-    Write-Output "$RepositoryName PSRepository Registered"
-} else {
-    Set-PSRepository -Name $RepositoryName -PublishLocation $RepositoryPublishUri
+# You cannot register more than one PSRepository with the same SourceLocation. 
+# Check one exists first and prefer to use that
+# If a PSRepository with the same SourceLocation doesn't exist, then we add one with random name and remove afterwards
+$removeRepo = $false
+$repoName = Get-PSRepository | Where-Object {$_.SourceLocation -eq $RepositorySourceUri} | Select-Object -ExpandProperty Name
+
+if($null -eq $repoName){
+    $repoName = New-Guid  # Need a random name
+    $removeRepo = $true   # Want to remove this random repoistory afterwards
+    Write-Host "Registering PSRepository $repoName with SourceLocation $RepositorySourceUri"
+    Register-Repository $repoName $RepositorySourceUri $RepositoryPublishUri
+} 
+
+Write-Host "Using PSRepository $repoName with SourceLocation $RepositorySourceUri to publish module"
+
+Publish-ModuleToFeed -NugetAPIKey $NugetAPIKey -RepositoryName $repoName -ModuleFolderPath $ModuleFolderPath
+
+# Only remove PSRepository if it was registered in this script
+if($removeRepo){
+    Write-Host "Unregister PSRepository $repoName"
+    UnRegister-Repository $repoName
 }
-
-Publish-ModuleToFeed $NugetAPIKey $RepositoryName $ModuleFolderPath
-
-UnRegister-Repository $RepositoryName
