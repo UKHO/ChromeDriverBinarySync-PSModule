@@ -37,6 +37,8 @@ function Update-ChromeDriver {
         }
 
         if ($updateChromeDriver) {
+            # Kill any chromedriver.exe that are running as they lock the test files
+            Get-Process -Name "chromedriver" -ErrorAction SilentlyContinue | Stop-Process -Force
             if ($PSCmdlet.ShouldProcess("Remove all items from $TargetDirectory") ) {
                 Get-ChildItem $TargetDirectory | Remove-Item -Force
             }
