@@ -1,14 +1,11 @@
 param(
     [Parameter(Mandatory)]
     [string]
-    $RepositoryName,
-    [Parameter(Mandatory)]
-    [string]
     $RepositorySourceUri
 )
 
-. $PSScriptRoot\Install-LatestModule.ps1 -Name PSScriptAnalyzer -RepositoryName $RepositoryName -RepositorySourceUri $RepositorySourceUri
-. $PSScriptRoot\Install-LatestModule.ps1 -Name Pester -RepositoryName $RepositoryName -RepositorySourceUri $RepositorySourceUri
+. $PSScriptRoot\Install-LatestModule.ps1 -Name PSScriptAnalyzer -RepositorySourceUri $RepositorySourceUri
+. $PSScriptRoot\Install-LatestModule.ps1 -Name Pester -RepositorySourceUri $RepositorySourceUri
 
 $parameters = @{
     OutputFile = "$PSScriptRoot\Test-PSScriptAnalyzer.XML";
